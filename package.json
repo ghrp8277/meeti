@@ -11,14 +11,21 @@
   "devDependencies": {
     "prettier": "^3.6.2",
     "turbo": "^2.5.8",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "@types/react": "~19.1.10",
+    "@types/react-dom": "~19.1.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "packageManager": "npm@10.8.2",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@nestjs/swagger": "^11.2.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  }
 }
