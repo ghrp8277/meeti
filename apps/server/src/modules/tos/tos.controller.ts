@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { TosService } from './tos.service';
 import { ApiDocs, CacheKey, CacheTTL } from '../../common/decorators';
 import { CacheInterceptor } from '../../common/interceptors';
+import { Public } from '../../common/decorators/public.decorator';
 
 @ApiTags('tos')
 @Controller('tos')
@@ -10,6 +11,7 @@ export class TosController {
   constructor(private readonly tosService: TosService) {}
 
   @Get('signup')
+  @Public()
   @UseInterceptors(CacheInterceptor)
   @CacheKey('tos:signup')
   @CacheTTL(3600)

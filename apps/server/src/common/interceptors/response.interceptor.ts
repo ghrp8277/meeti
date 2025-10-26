@@ -12,6 +12,7 @@ export interface ApiResponse<T> {
   message: string;
   data: T;
   timestamp: string;
+  statusCode: number;
 }
 
 @Injectable()
@@ -24,12 +25,15 @@ export class ResponseInterceptor<T>
   ): Observable<ApiResponse<T>> {
     const now = Date.now();
     const timestamp = new Date(now).toISOString();
+    const statusCode = context.switchToHttp().getResponse().statusCode;
+
     return next.handle().pipe(
       map((data) => ({
         success: true,
         message: '요청이 성공적으로 처리되었습니다.',
         data,
         timestamp,
+        statusCode,
       })),
     );
   }

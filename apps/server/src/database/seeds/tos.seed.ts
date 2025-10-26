@@ -29,7 +29,7 @@ export class TosSeed {
       },
       {
         code: 'PRIVACY_COLLECTION',
-        title: '개인정보 수집·이용 동의(필수)',
+        title: '개인정보 수집·이용 동의',
         template: `**개인정보 수집·이용 동의(필수)**
 
 - **목적**: 회원가입 및 본인확인, 서비스 제공(거래 중개·결제·정산·알림), 민원/분쟁 처리, 보안(부정이용 방지), **현금영수증 발급**
@@ -44,7 +44,7 @@ export class TosSeed {
       },
       {
         code: 'PRIVACY_THIRD_PARTY',
-        title: '개인정보 제3자 제공 동의(필수)',
+        title: '개인정보 제3자 제공 동의',
         template: `**개인정보 제3자 제공 동의(필수)**
 
 - **제공받는 자**:
