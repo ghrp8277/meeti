@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react";
 import { map, every } from "lodash-es";
 import Checkbox from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { useTos } from "../_providers/tos-provider";
+import { useSignupStore } from "../_stores/signup-store";
 
 function AllAgreeSection({
   checked,
@@ -53,7 +53,7 @@ function TosList({
   onItemChange,
 }: {
   tos: Tos[];
-  agreedItems: Set<number>;
+  agreedItems: number[];
   onItemChange: (id: number) => void;
 }) {
   return (
@@ -62,7 +62,7 @@ function TosList({
         <TosItem
           key={item.id}
           item={item}
-          checked={agreedItems.has(item.id)}
+          checked={agreedItems.includes(item.id)}
           onChange={() => onItemChange(item.id)}
         />
       ))}
@@ -74,23 +74,26 @@ export default function Tos({ onNext }: { onNext: () => void }) {
   const { data: response } = useSignupTos();
   const tos: Tos[] = response?.data || [];
   const { agreedItems, addAgreedItem, removeAgreedItem, setAgreedItems } =
-    useTos();
+    useSignupStore();
 
-  const allAgreed = every(tos, ({ id }) => agreedItems.has(id));
+  const safeAgreedItems = Array.isArray(agreedItems) ? agreedItems : [];
+  const allAgreed = every(tos, ({ id }) => safeAgreedItems.includes(id));
 
   const requiredTos = tos.filter((item) => item.isRequired);
-  const allRequiredAgreed = every(requiredTos, ({ id }) => agreedItems.has(id));
+  const allRequiredAgreed = every(requiredTos, ({ id }) =>
+    safeAgreedItems.includes(id)
+  );
 
   const handleAllAgree = () => {
     if (allAgreed) {
-      setAgreedItems(new Set());
+      setAgreedItems([]);
     } else {
-      setAgreedItems(new Set(map(tos, "id")));
+      setAgreedItems(map(tos, "id"));
     }
   };
 
   const handleItemAgree = (id: number) => {
-    if (agreedItems.has(id)) {
+    if (safeAgreedItems.includes(id)) {
       removeAgreedItem(id);
     } else {
       addAgreedItem(id);
@@ -104,13 +107,15 @@ export default function Tos({ onNext }: { onNext: () => void }) {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <AllAgreeSection checked={allAgreed} onChange={handleAllAgree} />
-      <TosList
-        tos={tos}
-        agreedItems={agreedItems}
-        onItemChange={handleItemAgree}
-      />
+    <div className="flex flex-col justify-between min-h-screen pt-[20px] pb-[40px]">
+      <div className="flex flex-col gap-4">
+        <AllAgreeSection checked={allAgreed} onChange={handleAllAgree} />
+        <TosList
+          tos={tos}
+          agreedItems={safeAgreedItems}
+          onItemChange={handleItemAgree}
+        />
+      </div>
       <Button
         variant="default"
         full

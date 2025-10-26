@@ -1,6 +1,6 @@
 import { Controller, Post, Delete, Put, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
-import { UserService } from './user.service';
+import { UserService } from './services/user.service';
 import { CreateUserDto, ChangePasswordDto } from './dto';
 import { ApiDocs } from '../../common/decorators';
 import { ApiResponseSchema, ErrorResponseSchema } from '../../common/schemas';

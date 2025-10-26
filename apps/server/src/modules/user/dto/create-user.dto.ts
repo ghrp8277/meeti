@@ -7,6 +7,8 @@ import {
   Matches,
   MinLength,
   MaxLength,
+  IsArray,
+  IsInt,
 } from 'class-validator';
 import { Gender } from '../../../enums/gender.enum';
 
@@ -72,4 +74,13 @@ export class CreateUserDto {
   })
   @IsOptional()
   gender?: Gender;
+
+  @ApiProperty({
+    description: '동의한 약관 ID 배열',
+    example: [1, 2, 3],
+    type: [Number],
+  })
+  @IsArray()
+  @IsInt({ each: true })
+  agreedTosIds: number[];
 }

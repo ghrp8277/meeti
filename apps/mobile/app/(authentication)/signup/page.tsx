@@ -4,34 +4,51 @@ import { useRouter } from "next/navigation";
 import Header from "../_components/header";
 import Tos from "./_components/tos";
 import Mobile from "./_components/mobile";
-import { TosProvider } from "./_providers/tos-provider";
-import { useState } from "react";
+import Form from "./_components/form";
+import { useMemo } from "react";
+import { useSignupStore } from "./_stores/signup-store";
 
 export default function Page() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<"tos" | "mobile">("tos");
+  const { currentStep, setCurrentStep } = useSignupStore();
 
   const handleNextStep = () => {
-    setCurrentStep("mobile");
+    if (currentStep === 0) {
+      setCurrentStep(1);
+    } else if (currentStep === 1) {
+      setCurrentStep(2);
+    }
   };
 
   const handleBack = () => {
-    if (currentStep === "mobile") {
-      setCurrentStep("tos");
+    if (currentStep === 1) {
+      setCurrentStep(0);
+    } else if (currentStep === 2) {
+      setCurrentStep(1);
     } else {
       router.back();
     }
   };
 
+  const title = useMemo(() => {
+    const titles = {
+      0: "약관 동의",
+      1: "휴대폰 번호 인증",
+      2: "필수 정보",
+    };
+    return titles[currentStep as keyof typeof titles];
+  }, [currentStep]);
+
   return (
-    <TosProvider>
-      <div>
-        <Header
-          title={currentStep === "tos" ? "약관 동의" : "휴대폰 번호 인증"}
-          onBack={handleBack}
-        />
-        {currentStep === "tos" ? <Tos onNext={handleNextStep} /> : <Mobile />}
-      </div>
-    </TosProvider>
+    <div>
+      <Header title={title} onBack={handleBack} />
+      {currentStep === 0 ? (
+        <Tos onNext={handleNextStep} />
+      ) : currentStep === 1 ? (
+        <Mobile onNext={handleNextStep} />
+      ) : (
+        <Form />
+      )}
+    </div>
   );
 }

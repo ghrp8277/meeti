@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from './repositories/user.repository';
-import { CreateUserDto, ChangePasswordDto } from './dto';
-import { User } from '../../entities/user.entity';
+import { UserRepository } from '../repositories/user.repository';
+import { UserTosAgreementService } from './user-tos-agreement.service';
+import { CreateUserDto, ChangePasswordDto } from '../dto';
+import { User } from '../../../entities/user.entity';
 import {
   ConflictException,
   NotFoundException,
   BadRequestException,
-} from '../../common/exceptions/custom.exception';
-import { ProfileService } from '../profile/profile.service';
+} from '../../../common/exceptions/custom.exception';
+import { ProfileService } from '../../profile/profile.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -16,12 +17,20 @@ export class UserService {
 
   constructor(
     private readonly repository: UserRepository,
+    private readonly userTosAgreementService: UserTosAgreementService,
     private readonly profileService: ProfileService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { email, password, name, birthDate, phoneNumber, gender } =
-      createUserDto;
+    const {
+      email,
+      password,
+      name,
+      birthDate,
+      phoneNumber,
+      gender,
+      agreedTosIds,
+    } = createUserDto;
 
     const existingUserByEmail = await this.repository.findOne({
       where: { email },
@@ -51,6 +60,12 @@ export class UserService {
     const user = await this.repository.create(userData);
 
     await this.profileService.create(user.id);
+
+    // 약관 동의 정보 저장
+    await this.userTosAgreementService.createUserAgreements(
+      user.id,
+      agreedTosIds,
+    );
 
     return user;
   }

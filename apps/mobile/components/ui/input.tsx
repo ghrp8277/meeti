@@ -8,7 +8,6 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helperText?: string;
   error?: boolean;
-  showClearButton?: boolean;
   showPasswordToggle?: boolean;
   required?: boolean;
   full?: boolean;
@@ -20,7 +19,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       label,
       helperText,
       error = false,
-      showClearButton = false,
       showPasswordToggle = false,
       required = false,
       full = false,
@@ -42,7 +40,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           : "password"
         : type;
 
-    const hasValue = value && value.toString().length > 0;
+    const hasValue =
+      value !== undefined &&
+      value !== null &&
+      value.toString().trim().length > 0;
     const isActive = isFocused || hasValue;
 
     const handleClear = () => {
@@ -59,15 +60,30 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-4">
         {label && (
-          <label className="text-sm font-medium text-black">
+          <label className="text-sm-semibold text-black">
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && (
+              <span className="bg-brand-red-500 rounded-full w-4 h-4 inline-block ml-1 align-text-top"></span>
+            )}
           </label>
         )}
 
-        <div className="relative">
+        <div
+          className={cn(
+            "relative px-[16px] py-3 rounded-[12px] border border-black transition-all duration-200",
+            full ? "w-full" : "w-[364px]",
+            "h-[45px] flex items-center",
+            props.disabled
+              ? "bg-tin-grey-200 border-[#dfdfdf]"
+              : error
+                ? "border-brand-red-500 bg-brand-red-100"
+                : isActive
+                  ? "border-black"
+                  : "border-tin-grey-500"
+          )}
+        >
           <input
             ref={ref}
             type={inputType}
@@ -76,48 +92,59 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className={cn(
-              "h-[45px] px-4 py-3 rounded-[12px] border transition-all duration-200",
-              full ? "w-full" : "w-[364px]",
-              "text-[15px] leading-[21px] tracking-[-0.6px] font-normal",
-              "placeholder:text-[#A5A5A5] text-black",
-              isActive
-                ? "border-black"
-                : error
-                  ? "border-red-500"
-                  : "border-[#DFDFDF]",
+              "w-full h-full text-[15px] leading-[21px] tracking-[-0.6px] font-normal",
+              "placeholder:text-blue-grey-500 text-black",
+              "border-none outline-none bg-transparent",
+              hasValue || (showPasswordToggle && type === "password")
+                ? "pr-[24px]"
+                : "pr-0",
               className
             )}
             {...props}
           />
 
           {/* Clear Button */}
-          {showClearButton && hasValue && (
+          {hasValue && !showPasswordToggle && type !== "password" && (
             <button
               type="button"
               onClick={handleClear}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#EFEFEF] rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
+              className="absolute right-[16px] top-1/2 -translate-y-1/2 w-[20px] h-[20px] bg-tin-grey-300 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
             >
-              <X className="w-3 h-3 text-[#787878]" strokeWidth={1.6} />
+              <X className="w-3 h-3 text-blue-grey-500" strokeWidth={1.6} />
             </button>
           )}
 
           {/* Password Toggle Button */}
           {showPasswordToggle && type === "password" && (
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center"
-            >
-              {isPasswordVisible ? (
-                <EyeOff className="w-5 h-5 text-[#64748B]" />
-              ) : (
-                <Eye className="w-5 h-5 text-[#64748B]" />
+            <div className="flex flex-row gap-8">
+              {hasValue && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="w-[20px] h-[20px] bg-tin-grey-300 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
+                >
+                  <X className="w-3 h-3 text-blue-grey-500" strokeWidth={1.6} />
+                </button>
               )}
-            </button>
+
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="w-5 h-5 flex items-center justify-center"
+              >
+                {isPasswordVisible ? (
+                  <EyeOff className="w-5 h-5 text-[#64748B]" />
+                ) : (
+                  <Eye className="w-5 h-5 text-[#64748B]" />
+                )}
+              </button>
+            </div>
           )}
         </div>
 
-        {helperText && <p className="text-sm text-[#A5A5A5]">{helperText}</p>}
+        {helperText && (
+          <p className="text-s text-brand-red-500">{helperText}</p>
+        )}
       </div>
     );
   }

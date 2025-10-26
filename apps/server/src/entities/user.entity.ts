@@ -12,6 +12,7 @@ import { Profile } from './profile.entity';
 import { Exposure } from './exposure.entity';
 import { Point } from './point.entity';
 import { Card } from './card.entity';
+import { UserTosAgreement } from './user-tos-agreement.entity';
 
 @Entity({
   name: 'users',
@@ -85,4 +86,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Card, (card) => card.user, { cascade: true })
   cards: Card[];
+
+  @OneToMany(() => UserTosAgreement, (agreement) => agreement.user, {
+    cascade: true,
+  })
+  tosAgreements: UserTosAgreement[];
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -11,14 +11,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-brand-red-500 text-white hover:bg-brand-red-400",
+        secondary: "bg-brand-red-100 text-brand-red-500 hover:bg-brand-red-200",
+        tertiary: "bg-lead-grey-800 text-white hover:bg-lead-grey-700",
       },
       size: {
-        default: "h-[50px] w-[324px] rounded-[12px] p-[12px]",
+        md: "h-[50px] w-[364px] rounded-[12px] p-[12px]",
+        sm: "h-[42px] w-[364px] rounded-[12px] p-[12px]",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      size: "md",
     },
   }
 );
@@ -28,6 +31,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   full?: boolean;
+  loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -38,6 +42,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       asChild = false,
       full = false,
+      loading = false,
       children,
       ...props
     },
@@ -48,14 +53,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({ variant, size, className }),
-          full && "w-full"
+          full && "w-full",
+          loading && "cursor-not-allowed"
         )}
         ref={ref}
         {...props}
       >
-        <ChevronLeft className="w-4 h-4" />
-        {children}
-        <ChevronRight className="w-4 h-4" />
+        {loading && (
+          <LoaderCircle className="!w-[16px] !h-[16px] animate-spin text-brand-red-500" />
+        )}
+        {!loading && children}
       </Comp>
     );
   }
