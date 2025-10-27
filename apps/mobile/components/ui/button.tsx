@@ -13,6 +13,8 @@ const buttonVariants = cva(
         default: "bg-brand-red-500 text-white hover:bg-brand-red-400",
         secondary: "bg-brand-red-100 text-brand-red-500 hover:bg-brand-red-200",
         tertiary: "bg-lead-grey-800 text-white hover:bg-lead-grey-700",
+        outline:
+          "bg-transparent border border-tin-grey-500 hover:border-tin-grey-600",
       },
       size: {
         md: "h-[50px] w-[364px] rounded-[12px] p-[12px]",

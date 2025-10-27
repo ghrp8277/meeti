@@ -4,12 +4,21 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PATH } from "@/app/constants";
+import Image from "next/image";
 
 export default function Page() {
   const router = useRouter();
 
   const handleEmailLogin = () => {
     router.push(PATH.LOGIN.EMAIL);
+  };
+
+  const handleGoogleLogin = () => {
+    console.log("Google 로그인");
+  };
+
+  const handleKakaoLogin = () => {
+    console.log("카카오 로그인");
   };
 
   return (
@@ -24,6 +33,30 @@ export default function Page() {
       </div>
 
       <div className="flex flex-col gap-40">
+        <div className="flex flex-col gap-10">
+          <Button variant="outline" full onClick={handleKakaoLogin}>
+            <div className="flex flex-row gap-8 items-center justify-center">
+              <Image
+                src="/sns/kakao/login.svg"
+                alt="kakao"
+                width={16}
+                height={16}
+              />
+              <div className="text-md font-medium">카카오 로그인</div>
+            </div>
+          </Button>
+          <Button variant="outline" full onClick={handleGoogleLogin}>
+            <div className="flex flex-row gap-8 items-center justify-center">
+              <Image
+                src="/sns/google/login.svg"
+                alt="google"
+                width={16}
+                height={16}
+              />
+              <div className="text-md font-medium">구글로 로그인</div>
+            </div>
+          </Button>
+        </div>
         <div className="flex flex-col gap-20">
           <Button variant="default" full onClick={handleEmailLogin}>
             이메일 로그인

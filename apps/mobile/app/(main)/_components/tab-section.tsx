@@ -22,7 +22,7 @@ export default function TabSection() {
   };
 
   return (
-    <div className="flex flex-row px-20 text-xl">
+    <div className="flex flex-row px-20 text-xl h-[29px]">
       <button
         onClick={() => handleTabChange("transfer")}
         className={cn(
