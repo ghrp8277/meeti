@@ -16,7 +16,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         <Providers>
-          <div className="container min-h-screen bg-white">{children}</div>
+          <div className="container min-w-[375px] min-h-screen bg-white">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

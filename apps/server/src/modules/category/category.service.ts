@@ -16,7 +16,7 @@ export class CategoryService {
         isDeleted: false,
       },
       order: {
-        createdAt: 'DESC',
+        seq: 'ASC',
       },
     });
   }
@@ -29,9 +29,6 @@ export class CategoryService {
         isDeleted: false,
       },
       select: ['id', 'name'],
-      order: {
-        createdAt: 'DESC',
-      },
     });
 
     if (!category) {
@@ -46,7 +43,7 @@ export class CategoryService {
       },
       select: ['id', 'name'],
       order: {
-        createdAt: 'DESC',
+        seq: 'ASC',
       },
     });
 

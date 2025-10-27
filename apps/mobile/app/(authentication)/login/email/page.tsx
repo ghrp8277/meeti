@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import AuthModal from "./_components/auth-modal";
+import { PATH } from "@/app/constants";
 
 export default function Page() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function Page() {
     });
 
     if (result?.ok) {
-      router.push("/");
+      router.push(PATH.MAIN.ROOT);
     } else {
       setShowErrorModal(true);
     }

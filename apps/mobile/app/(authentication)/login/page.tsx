@@ -3,12 +3,13 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { PATH } from "@/app/constants";
 
 export default function Page() {
   const router = useRouter();
 
   const handleEmailLogin = () => {
-    router.push("/login/email");
+    router.push(PATH.LOGIN.EMAIL);
   };
 
   return (

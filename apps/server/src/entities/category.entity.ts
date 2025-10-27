@@ -23,4 +23,13 @@ export class Category extends BaseEntity {
     comment: '부모 카테고리 ID',
   })
   parentId: number;
+
+  @Column({
+    name: 'seq',
+    type: 'int',
+    nullable: false,
+    default: 0,
+    comment: '순서',
+  })
+  seq: number;
 }
