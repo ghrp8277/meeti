@@ -1,7 +1,16 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
+
+  const handleEmailLogin = () => {
+    router.push("/login/email");
+  };
+
   return (
     <div className="flex flex-col gap-80 justify-center min-h-screen">
       <div className="flex flex-col gap-12">
@@ -15,7 +24,7 @@ export default function Page() {
 
       <div className="flex flex-col gap-40">
         <div className="flex flex-col gap-20">
-          <Button variant="default" full>
+          <Button variant="default" full onClick={handleEmailLogin}>
             이메일 로그인
           </Button>
 

@@ -157,8 +157,6 @@ export default function Mobile({ onNext }: { onNext: () => void }) {
   const {
     phoneNumber,
     setPhoneNumber,
-    authCode,
-    setAuthCode,
     isVerified,
     setIsVerified,
     showVerificationInput,
@@ -208,7 +206,7 @@ export default function Mobile({ onNext }: { onNext: () => void }) {
   const isComplete = numbers.length === 11;
 
   return (
-    <div className="flex flex-col justify-between min-h-screen pt-[20px] pb-[40px]">
+    <div className="h-full flex flex-col justify-between pt-[20px] pb-[40px]">
       <div className="flex flex-col gap-20">
         <PhoneNumberInput
           phoneNumber={phoneNumber}

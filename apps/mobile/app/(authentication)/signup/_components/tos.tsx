@@ -107,7 +107,7 @@ export default function Tos({ onNext }: { onNext: () => void }) {
   };
 
   return (
-    <div className="flex flex-col justify-between min-h-screen pt-[20px] pb-[40px]">
+    <div className="h-full flex flex-col justify-between pt-[20px] pb-[40px]">
       <div className="flex flex-col gap-4">
         <AllAgreeSection checked={allAgreed} onChange={handleAllAgree} />
         <TosList

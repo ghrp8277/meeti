@@ -84,26 +84,32 @@ function PasswordSection({
       isPasswordValid && passwordConfirm && password !== passwordConfirm
     );
 
-    let helperText: string | undefined;
-    if (password.length > 0 && password.length < 8) {
-      helperText = "비밀번호는 8자 이상 입력해주세요.";
-    } else if (password.length > 20) {
-      helperText = "비밀번호는 20자 이하로 입력해주세요.";
-    } else if (password.length >= 8 && typeCount < 2) {
-      helperText = "영문, 숫자, 특수문자 중 2가지 이상 조합해주세요.";
-    } else if (isPasswordMismatch) {
-      helperText = "비밀번호가 일치하지 않습니다.";
-    } else if (isPasswordMatch) {
-      helperText = "비밀번호가 일치합니다.";
-    }
-
     return {
+      isPasswordValid,
       isPasswordConfirmDisabled,
       isPasswordMatch,
       isPasswordMismatch,
-      helperText,
     };
   }, [password, passwordConfirm]);
+
+  const passwordHelperText = (() => {
+    if (password.length > 0 && password.length < 8) {
+      return "비밀번호는 8자 이상 입력해주세요.";
+    } else if (password.length > 20) {
+      return "비밀번호는 20자 이하로 입력해주세요.";
+    } else if (password.length >= 8) {
+      const checks = [
+        /[a-zA-Z]/.test(password),
+        /[0-9]/.test(password),
+        /[!@#$%^&*(),.?":{}|<>]/.test(password),
+      ];
+      const typeCount = checks.filter(Boolean).length;
+      if (typeCount < 2) {
+        return "영문, 숫자, 특수문자 중 2가지 이상 조합해주세요.";
+      }
+    }
+    return undefined;
+  })();
 
   return (
     <>
@@ -115,6 +121,8 @@ function PasswordSection({
         type="password"
         placeholder="비밀번호를 입력해주세요."
         maxLength={20}
+        error={password.length > 0 && !passwordValidation.isPasswordValid}
+        helperText={passwordHelperText}
         value={password}
         onChange={onPasswordChange}
       />
@@ -128,7 +136,11 @@ function PasswordSection({
         maxLength={20}
         disabled={passwordValidation.isPasswordConfirmDisabled}
         error={passwordValidation.isPasswordMismatch}
-        helperText={passwordValidation.helperText}
+        helperText={
+          passwordValidation.isPasswordMismatch
+            ? "비밀번호가 일치하지 않습니다."
+            : undefined
+        }
         value={passwordConfirm}
         onChange={onPasswordConfirmChange}
       />
@@ -233,7 +245,7 @@ function BirthdayInput({
     : { isValid: true, message: undefined };
   const isError = !isEmpty(birthday) && !validation.isValid;
 
-  let helperText: string | undefined = validation.message;
+  const helperText: string | undefined = validation.message;
 
   const handleBirthdayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatBirthday(e.target.value);
@@ -368,7 +380,7 @@ export default function Form() {
     });
   };
 
-  const isFormValid = useMemo(() => {
+  const isFormValid = (() => {
     const emailValid = every([
       email.length >= 4,
       email.length <= 20,
@@ -422,10 +434,10 @@ export default function Form() {
       birthdayValid,
       genderValid,
     ]);
-  }, [email, password, passwordConfirm, name, birthday, gender]);
+  })();
 
   return (
-    <div className="flex flex-col justify-between min-h-screen pt-[20px] pb-[40px]">
+    <div className="h-full flex flex-col justify-between pt-[20px] pb-[40px]">
       <div className="flex flex-col gap-16">
         <EmailInput email={email} onEmailChange={handleEmailChange} />
         <PasswordSection

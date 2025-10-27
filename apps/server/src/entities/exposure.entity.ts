@@ -21,8 +21,7 @@ export class Exposure extends BaseEntity {
 
   @Column({
     name: 'type',
-    type: 'enum',
-    enum: ExposureType,
+    type: 'varchar',
     nullable: false,
     comment: '노출권 타입',
   })

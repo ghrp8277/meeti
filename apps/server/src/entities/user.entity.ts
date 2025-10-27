@@ -17,6 +17,7 @@ import { UserTosAgreement } from './user-tos-agreement.entity';
 @Entity({
   name: 'users',
   comment: '유저 정보',
+  synchronize: true,
 })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -67,8 +68,7 @@ export class User extends BaseEntity {
 
   @Column({
     name: 'gender',
-    type: 'enum',
-    enum: Gender,
+    type: 'varchar',
     nullable: true,
     comment: '성별',
   })

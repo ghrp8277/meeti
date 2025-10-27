@@ -40,15 +40,17 @@ export default function Page() {
   }, [currentStep]);
 
   return (
-    <div>
+    <div className="container h-screen flex flex-col">
       <Header title={title} onBack={handleBack} />
-      {currentStep === 0 ? (
-        <Tos onNext={handleNextStep} />
-      ) : currentStep === 1 ? (
-        <Mobile onNext={handleNextStep} />
-      ) : (
-        <Form />
-      )}
+      <div className="flex-1">
+        {currentStep === 0 ? (
+          <Tos onNext={handleNextStep} />
+        ) : currentStep === 1 ? (
+          <Mobile onNext={handleNextStep} />
+        ) : (
+          <Form />
+        )}
+      </div>
     </div>
   );
 }

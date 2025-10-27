@@ -4,6 +4,7 @@ import { UserService } from './services/user.service';
 import { CreateUserDto, ChangePasswordDto } from './dto';
 import { ApiDocs } from '../../common/decorators';
 import { ApiResponseSchema, ErrorResponseSchema } from '../../common/schemas';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -11,6 +12,7 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   @Post()
+  @Public()
   @ApiResponse({
     status: 201,
     description: '회원가입 성공',
