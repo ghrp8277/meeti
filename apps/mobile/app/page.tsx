@@ -1,8 +1,11 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <div className="flex items-center justify-center p-4 min-h-screen">
       <div className="w-full bg-white rounded-2xl shadow-lg p-8">
@@ -11,6 +14,11 @@ export default function Home() {
             Welcome to Meeti
           </h1>
           <p className="text-gray-600">Your social meeting platform</p>
+          {session?.user?.email && (
+            <p className="text-sm text-gray-500 mt-2">
+              안녕하세요, {session.user.email}님!
+            </p>
+          )}
         </div>
 
         <div className="space-y-4">

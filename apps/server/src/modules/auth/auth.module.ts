@@ -21,7 +21,7 @@ import { JwtModuleOptions } from '@nestjs/jwt';
         return {
           secret: jwt.secret,
           signOptions: {
-            expiresIn: Number(jwt.expiresIn),
+            expiresIn: '1h',
           },
         };
       },

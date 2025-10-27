@@ -19,58 +19,72 @@ declare module "next-auth/jwt" {
   }
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const createCredentialsProvider = () => {
+  return CredentialsProvider({
+    name: "credentials",
+    credentials: {
+      email: { label: "Email", type: "email" },
+      password: { label: "Password", type: "password" },
+    },
+    async authorize(credentials) {
+      return await authenticateUser(credentials);
+    },
+  });
+};
+
+const authenticateUser = async (credentials: any) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: credentials?.email,
+        password: credentials?.password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.data?.accessToken) {
+      return {
+        id: data.data.sub || "1",
+        email: credentials?.email,
+        accessToken: data.data.accessToken,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Auth error:", error);
+    return null;
+  }
+};
+
+const createJwtCallback = () => {
+  return async ({ token, user }: any) => {
+    if (user?.accessToken) {
+      token.accessToken = user.accessToken;
+    }
+    return token;
+  };
+};
+
+const createSessionCallback = () => {
+  return async ({ session, token }: any) => {
+    if (token.accessToken) {
+      session.accessToken = token.accessToken;
+    }
+    return session;
+  };
+};
+
 const handler = NextAuth({
-  providers: [
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: credentials?.email,
-                password: credentials?.password,
-              }),
-            }
-          );
-
-          const user = await res.json();
-
-          if (res.ok && user.success) {
-            return {
-              id: user.data.userId || "1",
-              email: credentials?.email,
-              accessToken: user.data.accessToken,
-            };
-          }
-          return null;
-        } catch (error) {
-          console.error("Auth error:", error);
-          return null;
-        }
-      },
-    }),
-  ],
+  providers: [createCredentialsProvider()],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user?.accessToken) {
-        token.accessToken = user.accessToken;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token.accessToken) {
-        session.accessToken = token.accessToken;
-      }
-      return session;
-    },
+    jwt: createJwtCallback(),
+    session: createSessionCallback(),
   },
   pages: {
     signIn: "/login/email",

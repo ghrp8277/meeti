@@ -15,6 +15,7 @@ export class JwtAuthService {
     const { email, password } = loginDto;
 
     const user = await this.userService.validateUser(email, password);
+
     if (!user) {
       throw new UnauthorizedException('AU04');
     }
