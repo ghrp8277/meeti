@@ -8,6 +8,7 @@ import Checkbox from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import AuthModal from "./_components/auth-modal";
 
 export default function Page() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function Page() {
   const [autoLogin, setAutoLogin] = useState(false);
   const [keepLogin, setKeepLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -39,23 +41,19 @@ export default function Page() {
 
     setIsLoading(true);
 
-    try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
 
-      if (result?.ok) {
-        router.push("/");
-      } else {
-        console.error("로그인 실패:", result?.error);
-      }
-    } catch (error) {
-      console.error("로그인 에러:", error);
-    } finally {
-      setIsLoading(false);
+    if (result?.ok) {
+      router.push("/");
+    } else {
+      setShowErrorModal(true);
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -122,6 +120,8 @@ export default function Page() {
           </div>
         </div>
       </div>
+
+      {showErrorModal && <AuthModal onClose={() => setShowErrorModal(false)} />}
     </div>
   );
 }
