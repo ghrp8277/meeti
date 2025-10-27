@@ -1,9 +1,11 @@
 import { Search } from "lucide-react";
+import Image from "next/image";
 
 export default function HeaderSection() {
   return (
     <div className="flex flex-row justify-between items-center px-20 h-[50px]">
       <div className="flex flex-row gap-6">
+        <Image src="/logo/main.svg" alt="logo" width={60} height={18} />
         <div className="text-lead-grey-200 text-md font-bold">
           안전하고 합리적인 거래
         </div>
