@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className="antialiased bg-tin-grey-200">
         <Providers>
           <div className="container min-w-[375px] min-h-screen bg-white">
             {children}

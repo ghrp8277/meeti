@@ -12,11 +12,11 @@ export default function RegisterProductButton() {
   };
 
   return (
-    <div className="fixed bottom-[100px] right-[calc(50%-375px/2+20px)] rounded-full bg-brand-red-500 text-white text-base font-semibold px-14 py-12 z-10">
-      <div
-        onClick={handleRegisterProduct}
-        className="flex flex-row items-center justify-center gap-2 cursor-pointer"
-      >
+    <div
+      className="fixed bottom-[100px] right-[calc(50%-375px/2+20px)] rounded-full bg-brand-red-500 text-white text-base font-semibold px-14 py-12 z-10 cursor-pointer"
+      onClick={handleRegisterProduct}
+    >
+      <div className="flex flex-row items-center justify-center gap-2">
         상품 등록
         <Plus size={20} />
       </div>
