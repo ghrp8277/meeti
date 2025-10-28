@@ -4,6 +4,7 @@ export const PATH = {
     SETTING: "/my/setting",
     PROFILE: "/my/profile",
     POINT: "/my/point",
+    POINT_GUIDE: "/my/profile/point-guide",
   },
   LOGIN: {
     ROOT: "/login",
