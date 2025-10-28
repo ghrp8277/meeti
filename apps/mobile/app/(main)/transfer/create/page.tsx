@@ -4,6 +4,7 @@ import HeaderSection from "./_components/header-section";
 import { useRouter } from "next/navigation";
 import EventFrame from "./_components/frames/event-frame";
 import OptionFrame from "./_components/frames/option-frame";
+import PriceFrame from "./_components/frames/price-frame";
 
 export default function Page() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export default function Page() {
       <EventFrame />
       <div className="w-full h-[8px] bg-tin-grey-200" />
       <OptionFrame />
+      <div className="w-full h-[8px] bg-tin-grey-200" />
+      <PriceFrame />
       <div className="w-full h-[8px] bg-tin-grey-200" />
     </div>
   );

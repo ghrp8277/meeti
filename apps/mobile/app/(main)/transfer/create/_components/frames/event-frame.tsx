@@ -4,6 +4,7 @@ import { Category } from "@/app/types/category.type";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { CalendarBottomSheet, TestButton } from "../calendar-section";
 
 interface CategoryButtonProps {
   category: Category;
@@ -95,6 +96,8 @@ export default function EventFrame() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
+  const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<string>("");
 
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategoryId(categoryId);
@@ -104,6 +107,15 @@ export default function EventFrame() {
     setEventName(value);
   };
 
+  const handleTestClick = () => {
+    setIsCalendarOpen(true);
+  };
+
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+    setIsCalendarOpen(false);
+  };
+
   return (
     <div className="flex flex-col gap-20 p-20">
       <CategorySection
@@ -111,6 +123,18 @@ export default function EventFrame() {
         onCategorySelect={handleCategorySelect}
       />
       <EventNameInput value={eventName} onChange={handleEventNameChange} />
+      <TestButton onClick={handleTestClick} />
+
+      <CalendarBottomSheet
+        isOpen={isCalendarOpen}
+        onOpenChange={setIsCalendarOpen}
+        selectedDate={selectedDate}
+        onDateChange={handleDateChange}
+      />
+
+      {selectedDate && (
+        <div className="text-sm text-gray-600">선택된 날짜: {selectedDate}</div>
+      )}
     </div>
   );
 }

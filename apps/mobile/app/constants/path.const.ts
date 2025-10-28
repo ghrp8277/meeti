@@ -1,4 +1,7 @@
 export const PATH = {
+  MY: {
+    ROOT: "/my",
+  },
   LOGIN: {
     ROOT: "/login",
     EMAIL: "/login/email",

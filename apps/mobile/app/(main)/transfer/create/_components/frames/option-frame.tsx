@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import Textarea from "@/components/ui/textarea";
 import { useState } from "react";
 
 export default function OptionFrame() {
@@ -6,6 +7,7 @@ export default function OptionFrame() {
   const [seatLocation, setSeatLocation] = useState<string>("");
   const [area, setArea] = useState<string>("");
   const [row, setRow] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
   const handleSeatGradeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSeatGrade(e.target.value);
@@ -60,6 +62,14 @@ export default function OptionFrame() {
         required
         value={row}
         onChange={handleRowChange}
+      />
+      <Textarea
+        value={description}
+        label="기타 정보"
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="기타 정보를 입력해 주세요."
+        maxLength={1000}
+        showCount
       />
     </div>
   );

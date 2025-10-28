@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { PATH } from "@/app/constants";
 import { Home, BookOpen, MessageCircle, User } from "lucide-react";
 
 interface NavigationItemProps {
@@ -62,11 +64,12 @@ const NavigationItems = ({
 };
 
 const BottomNavigationBar = () => {
-  const [activeTab, setActiveTab] = useState("home");
+  const [activeTab, setActiveTab] = useState("transfer");
+  const router = useRouter();
 
   const navigationItems = [
     {
-      id: "home",
+      id: "transfer",
       label: "양도•동행",
       icon: (isActive: boolean) => (
         <div className="relative">
@@ -118,13 +121,27 @@ const BottomNavigationBar = () => {
     },
   ];
 
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    switch (tabId) {
+      case "my":
+        router.push(PATH.MY.ROOT);
+        break;
+      case "transfer":
+        router.push(PATH.TRANSFER.ROOT);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="fixed min-w-[375px] bottom-0 container h-[83px] z-[5] bg-white border-t-[0.333px] border-tin-grey-500">
       <div className="flex flex-row items-center justify-center h-full">
         <NavigationItems
           items={navigationItems}
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
         />
       </div>
     </div>
