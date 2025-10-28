@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { PATH } from "@/app/constants";
 
 interface ProfileAvatarProps {
   imageUrl?: string;
@@ -61,6 +65,11 @@ interface ProfileActionsProps {
 }
 
 const ProfileActions = ({ temperature }: ProfileActionsProps) => {
+  const router = useRouter();
+  const handleProfile = () => {
+    router.push(PATH.MY.PROFILE);
+  };
+
   return (
     <div className="flex flex-row gap-4 items-center">
       <TemperatureBadge temperature={temperature} />
@@ -68,7 +77,8 @@ const ProfileActions = ({ temperature }: ProfileActionsProps) => {
         width={20}
         height={20}
         strokeWidth={1.6}
-        className="text-lead-grey-800"
+        className="text-lead-grey-800 cursor-pointer"
+        onClick={handleProfile}
       />
     </div>
   );

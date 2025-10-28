@@ -1,6 +1,8 @@
 export const PATH = {
   MY: {
     ROOT: "/my",
+    SETTING: "/my/setting",
+    PROFILE: "/my/profile",
   },
   LOGIN: {
     ROOT: "/login",
