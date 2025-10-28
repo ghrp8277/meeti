@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import EventFrame from "./_components/frames/event-frame";
 import OptionFrame from "./_components/frames/option-frame";
 import PriceFrame from "./_components/frames/price-frame";
+import CardFrame from "./_components/frames/card-frame";
 
 export default function Page() {
   const router = useRouter();
@@ -20,6 +21,8 @@ export default function Page() {
       <OptionFrame />
       <div className="w-full h-[8px] bg-tin-grey-200" />
       <PriceFrame />
+      <div className="w-full h-[8px] bg-tin-grey-200" />
+      <CardFrame />
       <div className="w-full h-[8px] bg-tin-grey-200" />
     </div>
   );

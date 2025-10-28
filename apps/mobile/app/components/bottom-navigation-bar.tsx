@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { PATH } from "@/app/constants";
 import { Home, BookOpen, MessageCircle, User } from "lucide-react";
+import { map, some } from "lodash-es";
 
 interface NavigationItemProps {
   item: {
@@ -51,7 +51,7 @@ const NavigationItems = ({
 }: NavigationItemsProps) => {
   return (
     <div className="flex flex-row justify-around w-full">
-      {items.map((item) => (
+      {map(items, (item) => (
         <NavigationItem
           key={item.id}
           item={item}
@@ -64,8 +64,24 @@ const NavigationItems = ({
 };
 
 const BottomNavigationBar = () => {
-  const [activeTab, setActiveTab] = useState("transfer");
   const router = useRouter();
+  const pathname = usePathname();
+
+  const getActiveTab = () => {
+    if (pathname.startsWith(PATH.MY.ROOT)) {
+      return "my";
+    }
+    if (
+      some([PATH.TRANSFER.ROOT, PATH.COMPANION.ROOT], (path) =>
+        pathname.startsWith(path)
+      )
+    ) {
+      return "transfer";
+    }
+    return "transfer";
+  };
+
+  const activeTab = getActiveTab();
 
   const navigationItems = [
     {
@@ -122,7 +138,6 @@ const BottomNavigationBar = () => {
   ];
 
   const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
     switch (tabId) {
       case "my":
         router.push(PATH.MY.ROOT);
