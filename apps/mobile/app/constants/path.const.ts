@@ -3,6 +3,7 @@ export const PATH = {
     ROOT: "/my",
     SETTING: "/my/setting",
     PROFILE: "/my/profile",
+    POINT: "/my/point",
   },
   LOGIN: {
     ROOT: "/login",

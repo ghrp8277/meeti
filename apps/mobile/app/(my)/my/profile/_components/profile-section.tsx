@@ -1,5 +1,6 @@
 import { ChevronRight, CircleQuestionMark } from "lucide-react";
 import Image from "next/image";
+import Gauge from "./gauge";
 
 interface ProfileAvatarProps {
   imageUrl?: string;
@@ -55,6 +56,20 @@ export default function ProfileSection() {
               height={16}
               strokeWidth={1.6}
               className="text-violet-900"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-12">
+          <Gauge value={36.5} maxValue={100} />
+          <div className="rounded-[12px] py-10 px-16 bg-violet-300 flex flex-row justify-between items-center cursor-pointer">
+            <div className="text-s-medium text-black">
+              동행 참여하고 1점 올리기
+            </div>
+            <ChevronRight
+              width={16}
+              height={16}
+              strokeWidth={1.6}
+              className="text-black"
             />
           </div>
         </div>

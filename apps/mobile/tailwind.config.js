@@ -269,6 +269,20 @@ module.exports = {
       fontFamily: {
         pretendard: ["Pretendard", "sans-serif"],
       },
+      keyframes: {
+        slideDown: {
+          "0%": { maxHeight: "0", opacity: "0" },
+          "100%": { maxHeight: "1000px", opacity: "1" },
+        },
+        slideUp: {
+          "0%": { maxHeight: "1000px", opacity: "1" },
+          "100%": { maxHeight: "0", opacity: "0" },
+        },
+      },
+      animation: {
+        "slide-down": "slideDown 0.3s ease-out",
+        "slide-up": "slideUp 0.3s ease-out",
+      },
     },
   },
   plugins: [],
