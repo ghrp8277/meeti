@@ -23,4 +23,11 @@ export const PATH = {
   COMPANION: {
     ROOT: "/companion",
   },
+  CHAT: {
+    ROOT: "/chat",
+    ID: "/chat/:id",
+  },
+  GUIDE: {
+    ROOT: "/guide",
+  },
 } as const;

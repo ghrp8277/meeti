@@ -71,6 +71,12 @@ const BottomNavigationBar = () => {
     if (pathname.startsWith(PATH.MY.ROOT)) {
       return "my";
     }
+    if (pathname.startsWith(PATH.CHAT.ROOT)) {
+      return "chat";
+    }
+    if (pathname.startsWith(PATH.GUIDE.ROOT)) {
+      return "guide";
+    }
     if (
       some([PATH.TRANSFER.ROOT, PATH.COMPANION.ROOT], (path) =>
         pathname.startsWith(path)
@@ -145,21 +151,31 @@ const BottomNavigationBar = () => {
       case "transfer":
         router.push(PATH.TRANSFER.ROOT);
         break;
+      case "chat":
+        router.push(PATH.CHAT.ROOT);
+        break;
+      case "guide":
+        router.push(PATH.GUIDE.ROOT);
+        break;
       default:
         break;
     }
   };
 
   return (
-    <div className="fixed min-w-[375px] bottom-0 container h-[83px] z-[5] bg-white border-t-[0.333px] border-tin-grey-500">
-      <div className="flex flex-row items-center justify-center h-full">
-        <NavigationItems
-          items={navigationItems}
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-        />
+    <>
+      {/* spacer to prevent content from being hidden behind the fixed bar */}
+      <div className="h-[calc(83px+env(safe-area-inset-bottom))]" />
+      <div className="fixed min-w-[375px] bottom-0 container h-[83px] z-[5] bg-white border-t-[0.333px] border-tin-grey-500 pb-[env(safe-area-inset-bottom)]">
+        <div className="flex flex-row items-center justify-center h-full">
+          <NavigationItems
+            items={navigationItems}
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

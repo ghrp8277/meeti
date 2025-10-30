@@ -11,12 +11,13 @@ export default function Page() {
       <SettingSection />
       <ProfileSection />
       <PointerInfoSection />
-      <BottomNavigationBar />
 
       <div className="flex flex-col gap-8 px-20">
         <ActionFrame />
         <LinkFrame />
       </div>
+
+      <BottomNavigationBar />
     </div>
   );
 }
