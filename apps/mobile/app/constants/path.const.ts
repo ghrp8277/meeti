@@ -4,6 +4,11 @@ export const PATH = {
     SETTING: "/my/setting",
     PROFILE: "/my/profile",
     POINT: "/my/point",
+    CARD: {
+      ROOT: "/my/card",
+      CREATE: "/my/card/create",
+    },
+    ACCOUNT_REGISTER: "/my/account-register",
     POINT_GUIDE: "/my/profile/point-guide",
   },
   LOGIN: {

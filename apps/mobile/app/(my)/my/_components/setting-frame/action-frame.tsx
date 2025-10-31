@@ -151,9 +151,19 @@ export default function ActionFrame() {
     router.push(PATH.MY.POINT);
   };
 
+  const handleCard = () => {
+    router.push(PATH.MY.CARD.ROOT);
+  };
+
   const menuItems = [
     { icon: CircleParking, label: "포인트", value: "0P", onClick: handlePoint },
-    { icon: CreditCard, label: "카드 등록", value: "미등록", isDimmed: true },
+    {
+      icon: CreditCard,
+      label: "카드 등록",
+      value: "미등록",
+      isDimmed: true,
+      onClick: handleCard,
+    },
   ];
 
   return (

@@ -4,6 +4,7 @@ import {
   TosSeed,
   TosGroupSeed,
   TosGroupMapperSeed,
+  BankSeed,
 } from './seeds';
 import * as entities from '../entities';
 
@@ -31,6 +32,9 @@ async function runSeeds() {
 
     const tosGroupMapperSeed = new TosGroupMapperSeed();
     await tosGroupMapperSeed.run(dataSource);
+
+    const bankSeed = new BankSeed();
+    await bankSeed.run(dataSource);
 
     console.log('시드 데이터 생성 완료');
   } catch (error) {

@@ -8,4 +8,6 @@ export { Profile } from './profile.entity';
 export { Exposure } from './exposure.entity';
 export { Point } from './point.entity';
 export { Card } from './card.entity';
+export { SettlementAccount } from './settlement-account.entity';
 export { UserTosAgreement } from './user-tos-agreement.entity';
+export { Bank } from './bank.entity';

@@ -11,6 +11,8 @@ import { UserModule } from './modules/user/user.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { ExposureModule } from './modules/exposure/exposure.module';
 import { CardModule } from './modules/card/card.module';
+import { SettlementAccountModule } from './modules/settlement-account/settlement-account.module';
+import { BankModule } from './modules/bank/bank.module';
 import { PointModule } from './modules/point/point.module';
 import { NoticeModule } from './modules/notice/notice.module';
 import { AnswerModule } from './modules/answer/answer.module';
@@ -32,6 +34,8 @@ import { RedisModule } from './modules/redis/redis.module';
     ProfileModule,
     ExposureModule,
     CardModule,
+    SettlementAccountModule,
+    BankModule,
     PointModule,
     NoticeModule,
     AnswerModule,
