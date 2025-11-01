@@ -54,3 +54,20 @@ export async function fetchBanks({
     data: response.data as BankPaginationResponse["data"],
   };
 }
+
+export async function createSettlementAccount(accountData: {
+  accountHolder: string;
+  bankId: number;
+  accountNumber: string;
+  mobile: string;
+}): Promise<{
+  success: boolean;
+  message: string;
+}> {
+  const response = await api.post("/settlement-accounts", accountData);
+
+  return {
+    success: response.success,
+    message: response.message || "정산 계좌가 등록되었습니다.",
+  };
+}

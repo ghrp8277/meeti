@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { User } from './user.entity';
-import { Bank } from './bank.entity';
 
 @Entity({
   name: 'settlement_accounts',
@@ -55,7 +54,7 @@ export class SettlementAccount extends BaseEntity {
     name: 'mobile',
     type: 'varchar',
     nullable: false,
-    length: 11,
+    length: 13,
     comment: '휴대폰번호',
   })
   mobile: string;
@@ -63,8 +62,4 @@ export class SettlementAccount extends BaseEntity {
   @ManyToOne(() => User, (user) => user.settlementAccounts)
   @JoinColumn({ name: 'userId' })
   user: User;
-
-  @ManyToOne(() => Bank, { eager: true })
-  @JoinColumn({ name: 'bankId' })
-  bank: Bank;
 }

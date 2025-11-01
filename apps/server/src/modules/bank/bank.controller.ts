@@ -7,10 +7,6 @@ import {
   PageOptionsDto,
   buildPaginationResponse,
 } from '../../common/providers/pagination';
-import {
-  DEFAULT_PAGE,
-  DEFAULT_TAKE,
-} from '../../common/providers/pagination/constant';
 
 @ApiTags('banks')
 @Controller('banks')
@@ -31,11 +27,6 @@ export class BankController {
   async findAll(@Query() pageOptionsDto: PageOptionsDto) {
     const { banks, itemCount } = await this.bankService.findAll(pageOptionsDto);
 
-    return buildPaginationResponse(
-      banks,
-      itemCount,
-      pageOptionsDto.page ?? DEFAULT_PAGE,
-      pageOptionsDto.take ?? DEFAULT_TAKE,
-    );
+    return buildPaginationResponse(banks, itemCount, pageOptionsDto);
   }
 }

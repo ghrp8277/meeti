@@ -1,46 +1,60 @@
 "use client";
 
+import some from "lodash-es/some";
 import { Input } from "@/components/ui/input";
 
 function formatAccountNumber(value: string, bank: string, prevValue: string) {
   const numbers = value.replace(/\D/g, "");
 
-  if (!bank || numbers.length === 0) return numbers;
+  if (!bank || numbers.length === 0 || numbers.length > 20)
+    return numbers.length > 20 ? prevValue : numbers;
 
-  if (numbers.length > 20) return prevValue;
+  const bankPatterns = [
+    {
+      pattern: ["KB국민은행", "NH농협은행"],
+      format: (n: string) => {
+        if (n.length <= 6) return n;
+        if (n.length <= 12) return `${n.slice(0, 6)}-${n.slice(6)}`;
+        return `${n.slice(0, 6)}-${n.slice(6, 11)}-${n.slice(11)}`;
+      },
+    },
+    {
+      pattern: ["신한은행"],
+      format: (n: string) => {
+        if (n.length <= 3) return n;
+        if (n.length <= 6) return `${n.slice(0, 3)}-${n.slice(3)}`;
+        return `${n.slice(0, 3)}-${n.slice(3, 6)}-${n.slice(6)}`;
+      },
+    },
+    {
+      pattern: ["우리은행", "하나은행"],
+      format: (n: string) => {
+        if (n.length <= 3) return n;
+        if (n.length <= 11) return `${n.slice(0, 3)}-${n.slice(3)}`;
+        return `${n.slice(0, 3)}-${n.slice(3, 10)}-${n.slice(10)}`;
+      },
+    },
+    {
+      pattern: ["IBK기업은행"],
+      format: (n: string) => {
+        if (n.length <= 6) return n;
+        return `${n.slice(0, 6)}-${n.slice(6)}`;
+      },
+    },
+    {
+      pattern: ["카카오뱅크", "토스뱅크"],
+      format: (n: string) => {
+        if (n.length <= 4) return n;
+        return `${n.slice(0, 4)}-${n.slice(4)}`;
+      },
+    },
+  ];
 
-  if (bank.includes("KB국민은행") || bank.includes("NH농협은행")) {
-    if (numbers.length <= 6) return numbers;
-    if (numbers.length <= 12)
-      return `${numbers.slice(0, 6)}-${numbers.slice(6)}`;
-    return `${numbers.slice(0, 6)}-${numbers.slice(6, 11)}-${numbers.slice(11)}`;
-  }
+  const matchingPattern = bankPatterns.find((bp) =>
+    some(bp.pattern, (p) => bank.includes(p))
+  );
 
-  if (bank.includes("신한은행")) {
-    if (numbers.length <= 3) return numbers;
-    if (numbers.length <= 6)
-      return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
-    return `${numbers.slice(0, 3)}-${numbers.slice(3, 6)}-${numbers.slice(6)}`;
-  }
-
-  if (bank.includes("우리은행") || bank.includes("하나은행")) {
-    if (numbers.length <= 3) return numbers;
-    if (numbers.length <= 11)
-      return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
-    return `${numbers.slice(0, 3)}-${numbers.slice(3, 10)}-${numbers.slice(10)}`;
-  }
-
-  if (bank.includes("IBK기업은행")) {
-    if (numbers.length <= 6) return numbers;
-    return `${numbers.slice(0, 6)}-${numbers.slice(6)}`;
-  }
-
-  if (bank.includes("카카오뱅크") || bank.includes("토스뱅크")) {
-    if (numbers.length <= 4) return numbers;
-    return `${numbers.slice(0, 4)}-${numbers.slice(4)}`;
-  }
-
-  return numbers;
+  return matchingPattern ? matchingPattern.format(numbers) : numbers;
 }
 
 interface AccountNumberInputProps {

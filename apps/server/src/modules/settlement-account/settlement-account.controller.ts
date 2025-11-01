@@ -13,6 +13,7 @@ import { SettlementAccountService } from './settlement-account.service';
 import { CreateSettlementAccountDto, UpdateSettlementAccountDto } from './dto';
 import { ApiDocs, User, UserPayload } from '../../common/decorators';
 import { ApiResponseSchema, ErrorResponseSchema } from '../../common/schemas';
+import { Public } from '../../common/decorators/public.decorator';
 
 @ApiTags('settlement-accounts')
 @Controller('settlement-accounts')
@@ -40,6 +41,8 @@ export class SettlementAccountController {
     @Body() createAccountDto: CreateSettlementAccountDto,
     @User() user: UserPayload,
   ) {
+    console.log('createAccountDto', createAccountDto);
+    console.log('user', user);
     return this.settlementAccountService.create(user.id, createAccountDto);
   }
 

@@ -13,7 +13,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest();
+    const request = ctx.getRequest<Request>();
 
     let status: number;
     let errorCode: string;
@@ -25,8 +25,23 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message = exception.message;
     } else if (exception instanceof HttpException) {
       status = exception.getStatus();
-      errorCode = 'SV01';
-      message = exception.message;
+      errorCode = status === 400 ? 'RQ01' : 'SV01';
+
+      const exceptionResponse = exception.getResponse();
+      if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
+        const responseMessage = (
+          exceptionResponse as { message?: string | string[] }
+        ).message;
+        if (Array.isArray(responseMessage)) {
+          message = responseMessage.join(', ');
+        } else if (typeof responseMessage === 'string') {
+          message = responseMessage;
+        } else {
+          message = exception.message;
+        }
+      } else {
+        message = exception.message;
+      }
     } else {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
       errorCode = 'SV01';

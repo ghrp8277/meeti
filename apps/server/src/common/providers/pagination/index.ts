@@ -5,6 +5,7 @@ export { DateOptionsDto } from './date-options.dto';
 export { PageMetaDtoParameters } from './page-meta.interface';
 
 import { PageMetaDto } from './page-meta.dto';
+import { PageOptionsDto } from './page-options.dto';
 
 export interface PaginationResult<T> {
   data: T[];
@@ -14,15 +15,8 @@ export interface PaginationResult<T> {
 export function buildPaginationResponse<T>(
   data: T[],
   totalItemCount: number,
-  page: number,
-  take: number,
+  pageOptionsDto: PageOptionsDto,
 ): PaginationResult<T> {
-  const pageOptionsDto = {
-    page,
-    take,
-    skip: (page - 1) * take,
-  };
-
   const meta = new PageMetaDto({
     pageOptionsDto,
     totalItemCount,

@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import get from "lodash-es/get";
 import { Button } from "@/components/ui/button";
 import { usePhoneVerification } from "../_hooks/usePhoneVerification";
 import { usePhoneCodeVerification } from "../_hooks/usePhoneCodeVerification";
@@ -70,7 +71,7 @@ function VerificationCodeInput({
         },
         onError: (error: any) => {
           const message =
-            error?.response?.data?.message ||
+            get(error, "response.data.message") ||
             "인증번호가 일치하지 않습니다. 확인 후 다시 시도해 주세요.";
           setErrorMessage(message);
         },
@@ -155,7 +156,6 @@ export default function PhoneVerification({
 }: PhoneVerificationProps) {
   const [showVerificationInput, setShowVerificationInput] = useState(false);
   const [isTimerExpired, setIsTimerExpired] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const phoneVerificationMutation = usePhoneVerification();
 
@@ -194,7 +194,6 @@ export default function PhoneVerification({
   };
 
   const handleVerificationComplete = () => {
-    setIsVerified(true);
     onVerificationComplete(true);
   };
 

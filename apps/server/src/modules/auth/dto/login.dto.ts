@@ -6,7 +6,8 @@ export class LoginDto {
     description: '이메일',
     example: 'user@example.com',
   })
-  @IsEmail({}, { message: '올바른 이메일 형식이 아닙니다.' })
+  // @IsEmail({}, { message: '올바른 이메일 형식이 아닙니다.' })
+  @IsString()
   @IsNotEmpty()
   email: string;
 

@@ -14,9 +14,9 @@ export class PageOptionsDto {
   @IsOptional()
   @ApiProperty({
     description: '정렬 방향',
-    example: 'DESC',
+    example: 'ASC',
   })
-  readonly order?: 'ASC' | 'DESC' = 'DESC';
+  readonly order?: 'ASC' | 'DESC' = 'ASC';
 
   @Type(() => Number)
   @IsInt()

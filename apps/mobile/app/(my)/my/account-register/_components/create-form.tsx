@@ -1,29 +1,38 @@
 import { Input } from "@/components/ui/input";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
+import flatMap from "lodash-es/flatMap";
+import find from "lodash-es/find";
+import get from "lodash-es/get";
 import BankSelect from "./bank-select";
 import PhoneVerification from "./phone-verification";
 import AccountNumberInput from "./account-number-input";
 import { useBanks } from "../_hooks/useBanks";
+import { useAccountRegister } from "../_providers/account-register-provider";
 
 export default function CreateForm() {
-  const [bankId, setBankId] = useState<string>("");
-  const [accountHolder, setAccountHolder] = useState<string>("");
-  const [accountNumber, setAccountNumber] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [isPhoneVerified, setIsPhoneVerified] = useState<boolean>(false);
+  const {
+    accountHolder,
+    bankId,
+    accountNumber,
+    phoneNumber,
+    setAccountHolder,
+    setBankId,
+    setAccountNumber,
+    setPhoneNumber,
+    setIsPhoneVerified,
+  } = useAccountRegister();
 
   const { data } = useBanks();
-  const allBanks = data?.pages.flatMap((page) => page.data.data) ?? [];
 
   const bankName = useMemo(() => {
     if (!bankId) return "";
-    const bank = allBanks.find((b) => b.id.toString() === bankId);
-    return bank?.name || "";
-  }, [bankId, allBanks]);
-
-  const handleBankChange = (selectedBankId: string) => {
-    setBankId(selectedBankId);
-  };
+    const allBanks = flatMap(
+      data?.pages ?? [],
+      (page) => get(page, "data.data", []) ?? []
+    );
+    const bank = find(allBanks, (b) => b.id.toString() === bankId);
+    return get(bank, "name", "");
+  }, [bankId, data]);
 
   const handleAccountHolderChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -37,14 +46,6 @@ export default function CreateForm() {
     setAccountNumber(e.target.value);
   };
 
-  const handlePhoneNumberChange = (phone: string) => {
-    setPhoneNumber(phone);
-  };
-
-  const handleVerificationComplete = (verified: boolean) => {
-    setIsPhoneVerified(verified);
-  };
-
   return (
     <div className="flex flex-col gap-20 p-20">
       <Input
@@ -54,11 +55,7 @@ export default function CreateForm() {
         value={accountHolder}
         onChange={handleAccountHolderChange}
       />
-      <BankSelect
-        label="은행 선택"
-        onBankChange={handleBankChange}
-        error={false}
-      />
+      <BankSelect label="은행 선택" onBankChange={setBankId} error={false} />
       <AccountNumberInput
         value={accountNumber}
         onChange={handleAccountNumberChange}
@@ -67,8 +64,8 @@ export default function CreateForm() {
       />
       <PhoneVerification
         phoneNumber={phoneNumber}
-        onPhoneNumberChange={handlePhoneNumberChange}
-        onVerificationComplete={handleVerificationComplete}
+        onPhoneNumberChange={setPhoneNumber}
+        onVerificationComplete={setIsPhoneVerified}
       />
     </div>
   );

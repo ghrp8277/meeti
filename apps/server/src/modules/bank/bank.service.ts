@@ -15,9 +15,16 @@ export class BankService {
     const { take, skip, order } = pageOptionsDto;
 
     const [banks, itemCount] = await this.repository.findAndCount({
+      select: {
+        id: true,
+        code: true,
+        name: true,
+      },
       take,
       skip,
-      order: { code: order },
+      order: {
+        id: order,
+      },
     });
 
     return { banks, itemCount };

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length, IsInt } from 'class-validator';
+import { IsString, Length, IsInt, Matches } from 'class-validator';
 
 export class CreateSettlementAccountDto {
   @ApiProperty({
@@ -29,11 +29,14 @@ export class CreateSettlementAccountDto {
 
   @ApiProperty({
     description: '휴대폰번호',
-    example: '01012345678',
+    example: '010-1234-5678',
     minLength: 11,
-    maxLength: 11,
+    maxLength: 13,
   })
   @IsString()
-  @Length(11, 11)
+  @Matches(/^01[0-9]-\d{3,4}-\d{4}$/, {
+    message: '올바른 휴대폰 번호 형식이 아닙니다.',
+  })
+  @Length(11, 13)
   mobile: string;
 }
