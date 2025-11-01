@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useCallback } from "react";
 import { cn } from "@/lib/utils";
-import TabButton from "@/components/ui/tab-button";
-import { map, some, find } from "lodash-es";
+import { useScrollSectionDetector } from "../_hooks/use-scroll-section-detector";
+import { useHashNavigation } from "../_hooks/use-hash-navigation";
+import { useSectionScroller } from "../_hooks/use-section-scroller";
+import { useStickyTab } from "../_hooks/use-sticky-tab";
+import TabButtons from "./tab-buttons";
 
 interface Tab {
   id: string;
@@ -14,62 +16,61 @@ interface Tab {
 const tabs: Tab[] = [
   { id: "meeti-intro", label: "밋티 소개" },
   { id: "transfer", label: "양도" },
-  { id: "half-ticket", label: "반반티켓" },
+  { id: "half-ticket", label: "동행" },
 ];
 
 interface TabSectionProps {
-  initialActiveTabId?: string;
-  onTabChange?: (tabId: string) => void;
   className?: string;
 }
 
-const TabSection = ({
-  initialActiveTabId = "meeti-intro",
-  onTabChange,
-  className,
-}: TabSectionProps) => {
-  const [activeTabId, setActiveTabId] = useState(initialActiveTabId);
-  const router = useRouter();
-  const pathname = usePathname();
+const TabSection = ({ className }: TabSectionProps) => {
+  const { activeTabId, setActiveTabId, isScrollingRef } =
+    useScrollSectionDetector({ tabs });
 
-  useEffect(() => {
-    const setFromHash = () => {
-      const hash = typeof window !== "undefined" ? window.location.hash : "";
-      if (!hash) return;
-      const id = hash.replace(/^#/, "");
-      const matched = find(tabs, (t) => t.id === id);
-      if (!matched) return;
-      setActiveTabId(matched.id);
-      onTabChange?.(matched.id);
-    };
-    setFromHash();
-    window.addEventListener("hashchange", setFromHash);
-    return () => window.removeEventListener("hashchange", setFromHash);
-  }, [onTabChange]);
+  const { isSticky, containerRef } = useStickyTab({ initialTop: 0 });
 
-  const handleTabClick = (tabId: string) => {
-    setActiveTabId(tabId);
-    onTabChange?.(tabId);
-    router.replace(`${pathname}#${tabId}`, { scroll: false });
-  };
+  const onScrollStart = useCallback(() => {
+    isScrollingRef.current = true;
+  }, [isScrollingRef]);
+
+  const onScrollEnd = useCallback(() => {
+    isScrollingRef.current = false;
+  }, [isScrollingRef]);
+
+  const { scrollToSection } = useSectionScroller({
+    onScrollStart,
+    onScrollEnd,
+  });
+
+  useHashNavigation({
+    tabs,
+    setActiveTabId,
+    scrollToSection,
+  });
+
+  const handleTabClick = useCallback(
+    (tabId: string) => {
+      setActiveTabId(tabId);
+      scrollToSection(tabId);
+    },
+    [setActiveTabId, scrollToSection]
+  );
 
   return (
     <div
+      ref={containerRef}
       className={cn(
         "flex flex-row items-center px-20 py-12 pb-16 gap-6",
         "w-full bg-white",
+        isSticky && "sticky top-[0px] z-[4]",
         className
       )}
     >
-      {map(tabs, (tab) => (
-        <TabButton
-          key={tab.id}
-          isActive={activeTabId === tab.id}
-          onClick={() => handleTabClick(tab.id)}
-        >
-          {tab.label}
-        </TabButton>
-      ))}
+      <TabButtons
+        tabs={tabs}
+        activeTabId={activeTabId}
+        onTabClick={handleTabClick}
+      />
     </div>
   );
 };
